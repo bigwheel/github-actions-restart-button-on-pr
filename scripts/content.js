@@ -1,7 +1,7 @@
 // TODO: https://stackoverflow.com/questions/19191679/chrome-extension-inject-js-before-page-load
 
 function createRestartButton() {
-  const button = document.createElement("span");
+  const button = document.createElement("button");
   button.textContent = "Restart";
   button.className = "btn btn-sm";
 
@@ -9,32 +9,31 @@ function createRestartButton() {
 }
 
 function alreadyInserted(parentNode, insertingNode) {
-  parentNode.childNodes.forEach((node) => {
-    if (node.isEqualNode(insertingNode)) return true;
-  });
+  // Don't use forEach to early return
+  for (i = 0; i < parentNode.childNodes.length; i++)
+    if (parentNode.childNodes[i].isEqualNode(insertingNode)) return true;
   return false;
 }
 
-i = 0;
+safetyCounter = 0;
 
 const observer = new MutationObserver(() => {
   const detailsLinkSelector = "div.merge-status-list > div > div > a";
   const detailsLinks = document.querySelectorAll(detailsLinkSelector);
-  detailsLinks.forEach((link) => {
-    console.log(link.parentNode.childNodes);
+
+  detailsLinks.forEach((detailsLink) => {
     const button = createRestartButton();
-    if (!alreadyInserted(link.parentNode, button)) {
-      link.parentNode.insertBefore(button, link);
-      i = i + 1;
-      if (100 < i) {
+    if (!alreadyInserted(detailsLink.parentNode, button)) {
+      if (100 < ++safetyCounter) {
         console.log("abort");
         observer.disconnect();
       }
+
+      detailsLink.parentNode.insertBefore(button, detailsLink);
     }
   });
-
-  console.log("Added div element");
 });
+
 observer.observe(document.body, {
   childList: true,
   attributes: true,
