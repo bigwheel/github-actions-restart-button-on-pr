@@ -15,7 +15,7 @@ function alreadyInserted(parentNode, insertingNode) {
   return false;
 }
 
-safetyCounter = 0;
+let safetyCounter = 0;
 
 const observer = new MutationObserver(() => {
   const detailsLinkSelector = "div.merge-status-list > div > div > a";
