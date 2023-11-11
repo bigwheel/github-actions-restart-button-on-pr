@@ -4,10 +4,6 @@
   "description": "Add GitHub Actions restart button on PR page",
   "homepage_url": "https://github.com/bigwheel/github-restart-button-on-pr",
   "version": "1.0",
-  "action": {
-    "default_popup": "hello.html",
-    "default_icon": "hello_extensions.png"
-  },
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -17,10 +13,7 @@
   "content_scripts": [
     {
       "js": ["scripts/content.js"],
-      "matches": [
-        "https://developer.chrome.com/docs/extensions/*",
-        "https://developer.chrome.com/docs/webstore/*"
-      ]
+      "matches": ["https://github.com/*/*/pull/*"]
     }
   ]
 }
