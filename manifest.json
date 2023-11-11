@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "GitHub Restart Button on PR",
+  "description": "Add GitHub Actions restart button on PR page",
+  "homepage_url": "https://github.com/bigwheel/github-restart-button-on-pr",
+  "version": "1.0",
+  "action": {
+    "default_popup": "hello.html",
+    "default_icon": "hello_extensions.png"
+  }
+}
