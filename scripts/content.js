@@ -3,9 +3,12 @@ console.log("load content script");
 const observer = new MutationObserver(() => {
   const ghaDetailsLink = "div.merge-status-list > div > div > a";
   const links = document.querySelectorAll(ghaDetailsLink);
-  console.log(links);
   links.forEach((link) => {
-    console.log(link);
+    console.log(link.parentNode.childNodes);
+    const button = document.createElement("span");
+    button.textContent = "Restart";
+    link.parentNode.insertBefore(button, link);
+    observer.disconnect();
   });
 
   console.log("Added div element");
