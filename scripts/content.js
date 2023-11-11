@@ -1,9 +1,19 @@
 // TODO: https://stackoverflow.com/questions/19191679/chrome-extension-inject-js-before-page-load
 
-function createRestartButton() {
+function pushRestartButton() {
+  console.log("pushed");
+}
+
+function createRestartButton(workflowRunUrl) {
   const button = document.createElement("button");
   button.textContent = "Restart";
   button.className = "btn btn-sm";
+
+  // https://github.com/org_name/repo_name/actions/runs/1824374999/job/58560149807?pr=4012
+  const urlRegex = new RegExp("^https://github\\.com/(?<org>[^/]+)/(?<repo>[^/]+)/actions/runs/(?<workflow_id>\\d+)/job/(?<job_id>\\d+).*$");
+  console.log(workflowRunUrl.match(urlRegex));
+
+  button.addEventListener("click", pushRestartButton);
 
   return button;
 }
@@ -22,9 +32,9 @@ const observer = new MutationObserver(() => {
   const detailsLinks = document.querySelectorAll(detailsLinkSelector);
 
   detailsLinks.forEach((detailsLink) => {
-    const button = createRestartButton();
+    const button = createRestartButton(detailsLink.href);
     if (!alreadyInserted(detailsLink.parentNode, button)) {
-      if (100 < ++safetyCounter) {
+      if (1000 < ++safetyCounter) {
         console.log("abort");
         observer.disconnect();
       }
