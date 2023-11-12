@@ -15,7 +15,7 @@ function createPushRestartButton(targetUrl) {
       });
     } else {
       alert(
-        "先に拡張機能のアイコンをクリックしてgithub personal access tokenをセットしてください"
+        "Firstly set GitHub Personal Access Token by clicking extension icon."
       );
     }
   };
@@ -77,8 +77,8 @@ chrome.storage.sync.get(["github_token"]).then((result) => {
   let t = result.github_token;
   if (t == null) {
     const token = window.prompt(
-      "`Read and Write access to actions` 権限を持ったPersonal access tokenを入力してください",
-      "github_pat_.... みたいなフォーマットのはず"
+      "Put GitHub Personal Access Token with permission `Read and Write access to actions`",
+      ""
     );
     console.log(token);
     chrome.storage.sync.set({ github_token: token }).then(() => {
