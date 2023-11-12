@@ -2,6 +2,10 @@
 
 let global_token = "";
 
+chrome.storage.sync.get(["github_token"]).then((result) => {
+  if (result.github_token != null) global_token = result.github_token;
+});
+
 function createPushRestartButton(targetUrl) {
   return () => {
     if (global_token != "") {
@@ -71,20 +75,4 @@ observer.observe(document.body, {
   childList: true,
   attributes: true,
   subtree: true,
-});
-
-chrome.storage.sync.get(["github_token"]).then((result) => {
-  let t = result.github_token;
-  if (t == null) {
-    const token = window.prompt(
-      "Put GitHub Personal Access Token with permission `Read and Write access to actions`",
-      ""
-    );
-    console.log(token);
-    chrome.storage.sync.set({ github_token: token }).then(() => {
-      console.log("Value is set");
-    });
-    t = token;
-  }
-  global_token = t;
 });

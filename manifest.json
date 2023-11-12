@@ -10,11 +10,17 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "permissions": ["storage"],
+  "action": {
+    "default_icon": "icons/icon16.png"
+  },
+  "permissions": ["storage", "activeTab", "scripting"],
   "content_scripts": [
     {
       "js": ["scripts/inject.js"],
       "matches": ["https://github.com/*/*/pull/*"]
     }
-  ]
+  ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  }
 }
