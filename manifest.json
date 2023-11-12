@@ -10,9 +10,10 @@
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
+  "permissions": ["storage"],
   "content_scripts": [
     {
-      "js": ["scripts/content.js"],
+      "js": ["scripts/inject.js"],
       "matches": ["https://github.com/*/*/pull/*"]
     }
   ]

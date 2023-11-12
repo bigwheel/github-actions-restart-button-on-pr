@@ -1,17 +1,23 @@
 // TODO: https://stackoverflow.com/questions/19191679/chrome-extension-inject-js-before-page-load
 
+let global_token = "";
+
 function createPushRestartButton(targetUrl) {
   return () => {
-    console.log(targetUrl);
-
-  fetch(targetUrl, {
-    method: "POST",
-    headers: {
-      "Accept": "application/vnd.github+json",
-      "Authorization": "Bearer aaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      "X-GitHub-Api-Version": "2022-11-28"
+    if (global_token != "") {
+      fetch(targetUrl, {
+        method: "POST",
+        headers: {
+          Accept: "application/vnd.github+json",
+          Authorization: `Bearer ${global_token}`,
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      });
+    } else {
+      alert(
+        "先に拡張機能のアイコンをクリックしてgithub personal access tokenをセットしてください"
+      );
     }
-  });
   };
 }
 
@@ -28,9 +34,7 @@ function createRestartButton(workflowRunUrl) {
   const org = matchResult.groups["org"];
   const repo = matchResult.groups["repo"];
   const run_id = matchResult.groups["run_id"];
-  console.log(matchResult);
   const targetUrl = `https://api.github.com/repos/${org}/${repo}/actions/runs/${run_id}/rerun`;
-  console.log(targetUrl);
 
   button.addEventListener("click", createPushRestartButton(targetUrl));
 
@@ -67,4 +71,20 @@ observer.observe(document.body, {
   childList: true,
   attributes: true,
   subtree: true,
+});
+
+chrome.storage.sync.get(["github_token"]).then((result) => {
+  let t = result.github_token;
+  if (t == null) {
+    const token = window.prompt(
+      "`Read and Write access to actions` 権限を持ったPersonal access tokenを入力してください",
+      "github_pat_.... みたいなフォーマットのはず"
+    );
+    console.log(token);
+    chrome.storage.sync.set({ github_token: token }).then(() => {
+      console.log("Value is set");
+    });
+    t = token;
+  }
+  global_token = t;
 });
